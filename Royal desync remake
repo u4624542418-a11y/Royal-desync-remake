@@ -1,0 +1,254 @@
+local player=game.Players.LocalPlayer
+local UIS=game:GetService("UserInputService")
+local TweenService=game:GetService("TweenService")
+
+local function getHumanoid()
+    local char=player.Character or player.CharacterAdded:Wait()
+    return char:WaitForChild("Humanoid")
+end
+
+local humanoid=getHumanoid()
+
+local AC1=Color3.fromRGB(120,80,255)
+local AC2=Color3.fromRGB(180,120,255)
+local BG=Color3.fromRGB(10,10,18)
+local BM=Color3.fromRGB(18,18,30)
+local BT=Color3.fromRGB(22,22,38)
+local WH=Color3.fromRGB(235,235,245)
+local GR=Color3.fromRGB(130,130,145)
+local RD=Color3.fromRGB(255,60,80)
+local GN=Color3.fromRGB(30,200,100)
+
+local function mkCorner(p,r) local c=Instance.new("UICorner",p) c.CornerRadius=UDim.new(0,r or 8) end
+local function mkStroke(p,col,th)
+    local s=Instance.new("UIStroke",p)
+    s.Color=col or AC1 s.Thickness=th or 1.5
+    s.ApplyStrokeMode=Enum.ApplyStrokeMode.Border
+    return s
+end
+
+local ScreenGui=Instance.new("ScreenGui")
+ScreenGui.Name="EmoryaDesyncUnwalk"
+ScreenGui.ResetOnSpawn=false
+ScreenGui.Parent=player:WaitForChild("PlayerGui")
+
+local Main=Instance.new("Frame")
+Main.Size=UDim2.new(0,320,0,180)
+Main.Position=UDim2.new(0.5,-160,0.5,-90)
+Main.BackgroundColor3=BG
+Main.BackgroundTransparency=0.05
+Main.BorderSizePixel=0
+Main.Parent=ScreenGui
+Main.AnchorPoint=Vector2.new(0.5,0.5)
+mkCorner(Main,14)
+local mainStroke=mkStroke(Main,AC1,1.5)
+
+-- TOPBAR
+local TitleBar=Instance.new("Frame",Main)
+TitleBar.Size=UDim2.new(1,0,0,40)
+TitleBar.BackgroundColor3=BM
+TitleBar.BorderSizePixel=0
+mkCorner(TitleBar,14)
+local tbFix=Instance.new("Frame",TitleBar)
+tbFix.BackgroundColor3=BM tbFix.BorderSizePixel=0
+tbFix.Position=UDim2.new(0,0,0.5,0) tbFix.Size=UDim2.new(1,0,0.5,0)
+
+local hDot=Instance.new("Frame",TitleBar)
+hDot.Size=UDim2.new(0,7,0,7) hDot.Position=UDim2.new(0,10,0.5,-3.5)
+hDot.BackgroundColor3=AC1 hDot.BorderSizePixel=0 mkCorner(hDot,10)
+task.spawn(function()
+    while Main.Parent do
+        TweenService:Create(hDot,TweenInfo.new(0.7,Enum.EasingStyle.Sine),{BackgroundTransparency=0.2}):Play()
+        task.wait(0.7)
+        TweenService:Create(hDot,TweenInfo.new(0.7,Enum.EasingStyle.Sine),{BackgroundTransparency=0.8}):Play()
+        task.wait(0.7)
+    end
+end)
+
+local Title=Instance.new("TextLabel",TitleBar)
+Title.Size=UDim2.new(1,-80,1,0)
+Title.Position=UDim2.new(0,24,0,0)
+Title.BackgroundTransparency=1
+Title.Text="EMORYA DESYNC"
+Title.TextColor3=WH
+Title.Font=Enum.Font.GothamBold
+Title.TextSize=14
+Title.TextXAlignment=Enum.TextXAlignment.Left
+
+local MinBtn=Instance.new("TextButton",TitleBar)
+MinBtn.Size=UDim2.new(0,26,0,26)
+MinBtn.Position=UDim2.new(1,-62,0.5,-13)
+MinBtn.Text="-"
+MinBtn.BackgroundColor3=BT
+MinBtn.BackgroundTransparency=0.2
+MinBtn.TextColor3=WH
+MinBtn.Font=Enum.Font.GothamBold
+MinBtn.TextSize=14
+MinBtn.BorderSizePixel=0
+MinBtn.AutoButtonColor=false
+mkCorner(MinBtn,8)
+mkStroke(MinBtn,AC1,1,0.5)
+
+local CloseBtn=Instance.new("TextButton",TitleBar)
+CloseBtn.Size=UDim2.new(0,26,0,26)
+CloseBtn.Position=UDim2.new(1,-30,0.5,-13)
+CloseBtn.Text="X"
+CloseBtn.BackgroundColor3=Color3.fromRGB(40,10,15)
+CloseBtn.BackgroundTransparency=0.2
+CloseBtn.TextColor3=RD
+CloseBtn.Font=Enum.Font.GothamBold
+CloseBtn.TextSize=11
+CloseBtn.BorderSizePixel=0
+CloseBtn.AutoButtonColor=false
+mkCorner(CloseBtn,8)
+mkStroke(CloseBtn,RD,1,0.5)
+
+-- CONTENT
+local Content=Instance.new("Frame",Main)
+Content.Size=UDim2.new(1,0,1,-40)
+Content.Position=UDim2.new(0,0,0,40)
+Content.BackgroundTransparency=1
+Content.BorderSizePixel=0
+
+-- STATUS ROW
+local StatusFrame=Instance.new("Frame",Content)
+StatusFrame.Size=UDim2.new(1,-20,0,36)
+StatusFrame.Position=UDim2.new(0,10,0,10)
+StatusFrame.BackgroundColor3=BM
+StatusFrame.BackgroundTransparency=0.3
+StatusFrame.BorderSizePixel=0
+mkCorner(StatusFrame,8)
+mkStroke(StatusFrame,BT,1,0.3)
+
+local Dot=Instance.new("Frame",StatusFrame)
+Dot.Size=UDim2.new(0,8,0,8)
+Dot.Position=UDim2.new(0,10,0.5,-4)
+Dot.BackgroundColor3=GN
+Dot.BorderSizePixel=0
+mkCorner(Dot,10)
+
+local StatusText=Instance.new("TextLabel",StatusFrame)
+StatusText.Size=UDim2.new(1,-30,1,0)
+StatusText.Position=UDim2.new(0,26,0,0)
+StatusText.BackgroundTransparency=1
+StatusText.Text="Hook actif - packets interceptes"
+StatusText.TextColor3=GR
+StatusText.Font=Enum.Font.Gotham
+StatusText.TextSize=11
+StatusText.TextXAlignment=Enum.TextXAlignment.Left
+
+-- TOGGLE UNWALK ROW
+local ToggleFrame=Instance.new("Frame",Content)
+ToggleFrame.Size=UDim2.new(1,-20,0,70)
+ToggleFrame.Position=UDim2.new(0,10,0,54)
+ToggleFrame.BackgroundColor3=BM
+ToggleFrame.BackgroundTransparency=0.3
+ToggleFrame.BorderSizePixel=0
+mkCorner(ToggleFrame,10)
+mkStroke(ToggleFrame,BT,1,0.3)
+
+local UnwalkTitle=Instance.new("TextLabel",ToggleFrame)
+UnwalkTitle.Size=UDim2.new(0.7,0,0,24)
+UnwalkTitle.Position=UDim2.new(0,12,0,10)
+UnwalkTitle.BackgroundTransparency=1
+UnwalkTitle.Text="Unwalk"
+UnwalkTitle.TextColor3=AC2
+UnwalkTitle.Font=Enum.Font.GothamBold
+UnwalkTitle.TextSize=16
+UnwalkTitle.TextXAlignment=Enum.TextXAlignment.Left
+
+local UnwalkDesc=Instance.new("TextLabel",ToggleFrame)
+UnwalkDesc.Size=UDim2.new(0.7,0,0,14)
+UnwalkDesc.Position=UDim2.new(0,12,0,34)
+UnwalkDesc.BackgroundTransparency=1
+UnwalkDesc.Text="Freeze animation tracks + desync"
+UnwalkDesc.TextColor3=GR
+UnwalkDesc.Font=Enum.Font.Gotham
+UnwalkDesc.TextSize=10
+UnwalkDesc.TextXAlignment=Enum.TextXAlignment.Left
+
+local pill=Instance.new("Frame",ToggleFrame)
+pill.Size=UDim2.new(0,44,0,22)
+pill.Position=UDim2.new(1,-56,0.5,-11)
+pill.BackgroundColor3=AC1
+pill.BorderSizePixel=0
+mkCorner(pill,12)
+mkStroke(pill,AC2,1,0.3)
+
+local knob=Instance.new("Frame",pill)
+knob.Size=UDim2.new(0,18,0,18)
+knob.Position=UDim2.new(1,-20,0.5,-9)
+knob.BackgroundColor3=WH
+knob.BorderSizePixel=0
+mkCorner(knob,10)
+
+local ToggleButton=Instance.new("TextButton",ToggleFrame)
+ToggleButton.Size=UDim2.new(1,0,1,0)
+ToggleButton.BackgroundTransparency=1
+ToggleButton.Text=""
+
+-- LOGIQUE
+local enabled=true
+local animConnection
+
+local function stopAnims(hum)
+    for _,track in pairs(hum:GetPlayingAnimationTracks()) do track:Stop() end
+end
+
+local function setOn(state)
+    if state then
+        TweenService:Create(knob,TweenInfo.new(0.2,Enum.EasingStyle.Back),{Position=UDim2.new(1,-20,0.5,-9)}):Play()
+        TweenService:Create(pill,TweenInfo.new(0.15),{BackgroundColor3=AC1}):Play()
+        TweenService:Create(Dot,TweenInfo.new(0.2),{BackgroundColor3=GN}):Play()
+        TweenService:Create(mainStroke,TweenInfo.new(0.2),{Color=GN}):Play()
+        StatusText.Text="Hook actif - packets interceptes"
+        humanoid=getHumanoid()
+        stopAnims(humanoid)
+        animConnection=humanoid.AnimationPlayed:Connect(function(t) t:Stop() end)
+        pcall(function() raknet.desync(true) end)
+    else
+        TweenService:Create(knob,TweenInfo.new(0.2,Enum.EasingStyle.Back),{Position=UDim2.new(0,2,0.5,-9)}):Play()
+        TweenService:Create(pill,TweenInfo.new(0.15),{BackgroundColor3=BT}):Play()
+        TweenService:Create(Dot,TweenInfo.new(0.2),{BackgroundColor3=RD}):Play()
+        TweenService:Create(mainStroke,TweenInfo.new(0.2),{Color=AC1}):Play()
+        StatusText.Text="Desync inactive - no interception"
+        if animConnection then animConnection:Disconnect(); animConnection=nil end
+        pcall(function() raknet.desync(false) end)
+    end
+end
+
+ToggleButton.Activated:Connect(function()
+    enabled=not enabled
+    setOn(enabled)
+end)
+
+MinBtn.Activated:Connect(function()
+    Content.Visible=not Content.Visible
+    TweenService:Create(Main,TweenInfo.new(0.25,Enum.EasingStyle.Quad),{
+        Size=Content.Visible and UDim2.new(0,320,0,180) or UDim2.new(0,320,0,42)
+    }):Play()
+    MinBtn.Text=Content.Visible and "-" or "+"
+end)
+
+CloseBtn.Activated:Connect(function()
+    pcall(function() raknet.desync(false) end)
+    ScreenGui:Destroy()
+end)
+
+-- DRAG
+local dragging,dragStart,startPos=false,nil,nil
+TitleBar.InputBegan:Connect(function(input)
+    if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then
+        dragging=true dragStart=input.Position startPos=Main.Position
+        input.Changed:Connect(function() if input.UserInputState==Enum.UserInputState.End then dragging=false end end)
+    end
+end)
+UIS.InputChanged:Connect(function(input)
+    if dragging and(input.UserInputType==Enum.UserInputType.MouseMovement or input.UserInputType==Enum.UserInputType.Touch) then
+        local delta=input.Position-dragStart
+        Main.Position=UDim2.new(startPos.X.Scale,startPos.X.Offset+delta.X,startPos.Y.Scale,startPos.Y.Offset+delta.Y)
+    end
+end)
+
+-- Init
+setOn(true)
